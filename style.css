@@ -1,0 +1,21 @@
+body{
+    background-color: aliceblue;
+    font-family: sans-serif;
+
+}
+
+.website-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    max-width: 1467px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.header {
+    color: #333;
+
+}
+
