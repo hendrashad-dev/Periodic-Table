@@ -1222,7 +1222,13 @@ function createPeriodicTable(elements) {
         <span class="element-name">${element.name}</span>
         `;
 
+        cardElement.addEventListener('click', function opentheModal() {
+            console.log('test')
+            openModal(element)
+        })
+
         periodicTable.appendChild(cardElement)
+
     });
 }
 
@@ -1262,3 +1268,25 @@ searchInput.addEventListener('input', (e) => {
         });
     }
 });
+
+const modal = document.getElementById('elementModal')
+const closeModalBtn = document.getElementById('closeModal')
+
+const detailNumber = document.getElementById('detailNumber')
+const detailSymbol = document.getElementById('detailSymbol')
+const detailName = document.getElementById('detailName')
+const detailCategory = document.getElementById('detailCategory')
+const detailMass = document.getElementById('detailMass')
+const detailDescription = document.getElementById('detailDescription')
+
+function openModal(element) {
+    detailNumber.textContent = element.numberAtoms
+    detailSymbol.textContent = element.symbol
+    detailName.textContent = element.name
+    detailCategory.textContent = element.categoryInTable.replace('-', '')
+    detailMass.textContent = element.AtomicMass
+    detailDescription.textContent = element.description
+
+    modal.classList.add('opened')
+
+}
