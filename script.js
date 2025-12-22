@@ -1214,7 +1214,7 @@ function createPeriodicTable(elements) {
         cardElement.style.gridColumn = element.columon
         cardElement.style.gridRow = element.row
 
-        cardElement.style.backgroundColor = `var(--cat-${element.categoryInTable})`
+        cardElement.style.background = `var(--cat-${element.categoryInTable})`
 
         cardElement.innerHTML = `
         <span class="element-number">${element.numberAtoms}</span>

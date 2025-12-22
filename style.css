@@ -1,5 +1,15 @@
-:root{
-    --cat-nonmetal: hsl(120deg, 73%, 74%);
+:root {
+
+    --cat-alkali-metals: linear-gradient(to bottom, #ff9999 0%, #ffadad 100%);
+    --cat-alkaline-earth-metals: linear-gradient(to bottom, #ffc078 0%, #ffd6a5 100%);
+    --cat-transition-metals: linear-gradient(to bottom, #fff59d 0%, #fdffb6 100%);
+    --cat-post-transition-metals: linear-gradient(to bottom, #a3e635 0%, #caffbf 100%);
+    --cat-metalloids: linear-gradient(to bottom, #67e8f9 0%, #9bf6ff 100%);
+    --cat-nonmetal: linear-gradient(to bottom, #7faaff 0%, #a0c4ff 100%);
+    --cat-noble-gases: linear-gradient(to bottom, #a29bfe 0%, #bdb2ff 100%);
+    --cat-lanthanides: linear-gradient(to bottom, #ffa3f0 0%, #ffc6ff 100%);
+    --cat-actinides: linear-gradient(to bottom, #f1f2f6 0%, #fffffc 100%);
+    --cat-unknown-properties: linear-gradient(to bottom, #ced6e0 0%, #eee 100%);
 }
 
 body{
