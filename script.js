@@ -1289,7 +1289,7 @@ function openModal(element) {
 
     modal.classList.add('opened')
 
-    window.startInit('atom-visualizer')
+    window.startInit('atom-visualizer', element.numberAtoms)
 
 }
 

@@ -4,10 +4,12 @@ const states = {
     scene: null,
     camera: null,
     renderer: null,
-    container: null
+    controls: null,
+    container: null,
+    atomGroup: null,
 }
 
-function startInit(divId) {
+function startInit(divId, atomNum) {
     states.container = document.getElementById(divId)
     
     states.scene = new THREE.Scene()
@@ -21,25 +23,77 @@ function startInit(divId) {
     states.renderer.setSize(states.container.clientWidth, states.container.clientHeight)
     states.renderer.setPixelRatio(window.devicePixelRatio)
 
+    states.container.innerHTML = ''
+
     states.container.appendChild(states.renderer.domElement)
 
     states.renderer.render(states.scene, states.camera)
 
-    const geometry = new THREE.SphereGeometry(1, 32, 32)
-    const material = new THREE.MeshStandardMaterial({ color: 0x00aaff })
-    const sphere = new THREE.Mesh(geometry, material)
-    states.scene.add(sphere)
 
-    const light = new THREE.PointLight(0xffffff, 6)
-    light.position.set(5, 5, 5)
-    states.scene.add(light)
+    states.controls = new THREE.OrbitControls(states.camera, states.renderer.domElement)
+    states.controls.enableDamping = true
+    states.controls.autoRotate = true
 
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6)
+    states.scene.add(ambientLight)
+
+    const pointLight = new THREE.PointLight(0xffffff, 1)
+    pointLight.position.set(10, 10, 10)
+    states.scene.add(pointLight)
+
+
+    createAtom(atomNum)
+    
     function animate() {
         requestAnimationFrame(animate)
-        sphere.rotation.y += 0.06
+        states.controls.update()
         states.renderer.render(states.scene, states.camera)
     }
-
+    
     animate()
 
+}
+
+function createAtom(atomNum) {
+    states.atomGroup = new THREE.Group()
+    states.atomGroup.add(createNucleus(atomNum))
+    states.scene.add(states.atomGroup)
+}
+
+
+function createNucleus(atomNum) {
+    const nucleusGroup = new THREE.Group()
+    const particleCount = atomNum * 2
+
+    const geometry = new THREE.SphereGeometry(0.8, 36, 32)
+
+    const protonMat = new THREE.MeshPhongMaterial({ color: 0xff4d4d, shininess: 100 })
+
+    const neutronMat = new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 100 })
+
+    for (let i = 0; i < particleCount; i++) {
+
+        const isProton = Math.random() > 0.5
+
+        const particle = new THREE.Mesh(geometry, isProton ? protonMat : neutronMat)
+
+
+        const radius = Math.cbrt(particleCount) * 0.6
+        const theta = Math.random() * Math.PI * 2
+
+        const phi = Math.acos(2 * Math.random() - 1)
+        const r = Math.cbrt(Math.random()) * radius
+
+        particle.position.set(
+            r * Math.sin(phi) * Math.cos(theta),
+            r * Math.sin(phi) * Math.sin(theta),
+            r * Math.cos(phi)
+        )
+        
+
+        nucleusGroup.add(particle)
+    }
+    
+    return nucleusGroup
 }
