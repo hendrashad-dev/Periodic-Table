@@ -7,6 +7,7 @@ const states = {
     controls: null,
     container: null,
     atomGroup: null,
+    electrons: [],
 }
 
 function startInit(divId, atomNum) {
@@ -47,8 +48,25 @@ function startInit(divId, atomNum) {
     
     function animate() {
         requestAnimationFrame(animate)
-        states.controls.update()
-        states.renderer.render(states.scene, states.camera)
+
+        if (states.controls) {
+             states.controls.update()
+        }
+
+        states.electrons.forEach( ele => {
+            ele.userData.angle += ele.userData.speed;
+            ele.position.x = Math.cos(ele.userData.angle) * ele.userData.radius
+            ele.position.z = Math.sin(ele.userData.angle) * ele.userData.radius
+        })
+    
+
+        if (states.atomGroup) {
+            states.atomGroup.rotation.y += 0.002
+        }
+    
+        if (states.renderer && states.scene) {
+            states.renderer.render(states.scene, states.camera)
+        }
     }
     
     animate()
@@ -58,6 +76,8 @@ function startInit(divId, atomNum) {
 function createAtom(atomNum) {
     states.atomGroup = new THREE.Group()
     states.atomGroup.add(createNucleus(atomNum))
+
+    createElectronShells(atomNum)
     states.scene.add(states.atomGroup)
 }
 
@@ -96,4 +116,80 @@ function createNucleus(atomNum) {
     }
     
     return nucleusGroup
+}
+
+function createElectronShells(atomicNumber) {
+    let remainingElectrons = atomicNumber
+    let shellIndex = 1
+    
+
+    while (remainingElectrons > 0) {
+        const capacity = 2 * shellIndex * shellIndex
+        const count = Math.min(remainingElectrons, capacity)
+        
+        const radius = 4 + (shellIndex * 2.5)
+        const speed = 0.02 / shellIndex
+
+
+        const orbitGeo = new THREE.TorusGeometry(radius, 0.05, 16, 100)
+
+
+        const orbitMat = new THREE.MeshBasicMaterial(
+            { 
+                color: 0xaaaaaa,
+                transparent: true,
+                opacity: 0.3
+            }
+        )
+
+        const orbit = new THREE.Mesh(orbitGeo, orbitMat)
+        orbit.rotation.x = Math.PI / 2
+
+        const ringGeo = new THREE.TorusGeometry(radius, 0.05, 16, 100)
+        const ringMat = new THREE.MeshBasicMaterial({ color: 0xaaaaaa, transparent: true, opacity: 0.3 })
+
+        const ring = new THREE.Mesh(ringGeo, ringMat)
+        ring.rotation.x = Math.PI / 2
+        
+        
+        const eleGeo = new THREE.SphereGeometry(0.13, 16,16)
+        const eleMat = new THREE.MeshPhongMaterial(
+            { 
+                color: 0x0071e3,
+                emissive: 0x0071e3,
+                emissiveIntensity : 0.5 
+
+            }
+        )
+
+        const shellGroup = new THREE.Group()
+        shellGroup.add(ring)
+
+        for (let i = 0; i < count; i++) {
+            const electron = new THREE.Mesh(eleGeo, eleMat)
+            const angel = Math.random() * Math.PI * 2
+
+            electron.userData = {
+                angle: angel,
+                radius: radius,
+                speed: speed * (shellIndex % 2 === 0? 1 : -1),
+            }
+
+            electron.position.x = Math.cos(angel) * radius
+            electron.position.z = Math.sin(angel) * radius
+
+            shellGroup.add(electron)
+            states.electrons.push(electron)
+            
+        }
+        
+        
+        shellGroup.rotation.x = Math.random() * Math.PI
+        shellGroup.rotation.y = Math.random() * Math.PI
+        
+        states.atomGroup.add(shellGroup)
+
+        remainingElectrons -= count
+        shellIndex++
+    }
 }

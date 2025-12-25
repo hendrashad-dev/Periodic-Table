@@ -21,7 +21,7 @@ body{
 .website-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    /* min-height: 100vh; */
 
     max-width: 1467px;
     margin: 0 auto;
@@ -131,6 +131,7 @@ h1 {
     opacity: 0;
     transition: 300ms ease;
     pointer-events: none;
+    z-index: 5;
 }
 
 .modal-overlay.opened {
@@ -143,7 +144,7 @@ h1 {
     background-color: #ffffffde;
     width: 90%;
     max-width: 670px;
-    max-height: 90vh;
+    /* max-height: 90vh; */
     padding: 20px;
     border-radius: 12px;
     transform: scale(0.95);
@@ -257,3 +258,10 @@ h1 {
     background: #ffffff;
   }
   
+footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 20px;
+    opacity: 0.7;
+}
+
