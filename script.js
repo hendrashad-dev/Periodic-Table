@@ -1289,6 +1289,8 @@ function openModal(element) {
 
     modal.classList.add('opened')
 
+    window.startInit('atom-visualizer')
+
 }
 
 function closeModal() {
