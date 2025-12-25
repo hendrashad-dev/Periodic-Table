@@ -1290,3 +1290,14 @@ function openModal(element) {
     modal.classList.add('opened')
 
 }
+
+function closeModal() {
+    modal.classList.remove('opened')
+}
+
+
+closeModalBtn.addEventListener('click', closeModal)
+
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal()
+})
